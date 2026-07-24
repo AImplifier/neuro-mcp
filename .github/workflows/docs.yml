@@ -1,3 +1,5 @@
+# Builds the docs/ MkDocs site and deploys it to GitHub Pages.
+# Requires Settings > Pages > Source = "GitHub Actions" (one-time repo setting).
 name: Deploy docs
 
 on:
