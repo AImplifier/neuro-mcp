@@ -1,5 +1,7 @@
 # neuro-mcp
 
+<!-- mcp-name: io.github.AImplifier/neuro-mcp -->
+
 A MCP for **NeuroAgents** that assist clinicians and researchers. It gives an
 AI agent one interface over the whole workflow: signal processing and source
 imaging (via [MNE-Python](https://mne.tools)), a persistent dataset + **EHR**
