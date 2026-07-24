@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neuro-mcp"
+version = "0.1.1"
+description = "A MCP for NeuroAgents that assist clinicians and researchers: MNE processing + source imaging, a Postgres/BIDS data & EHR store, and NeuroII web visualization."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "BSD-3-Clause" }
+authors = [{ name = "neuro-mcp contributors" }]
+keywords = ["eeg", "meg", "mne", "mcp", "bids", "ehr", "fhir", "source-imaging", "neuroagents"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "mne>=1.6",
+    "mne-bids>=0.14",
+    "fastmcp>=2.0",
+    "sqlalchemy>=2.0",
+    "pydantic>=2.0",
+    "httpx>=0.24",
+    "matplotlib>=3.7",
+    "plotly>=5.18",
+    "numpy",
+    "scipy",
+    "scikit-learn",
+    "nibabel",
+]
+
+[project.optional-dependencies]
+# psycopg is LGPL-3.0 (used unmodified as a separate dependency; not bundled).
+postgres = ["psycopg[binary]>=3.1"]
+# PySide6 (LGPL-3.0) is chosen over PyQt6 (GPL-3.0) to keep the optional 3D
+# viz stack license-compatible with this BSD-3 project.
+viz3d = ["pyvista>=0.43", "pyvistaqt", "PySide6"]
+dev = ["pytest>=7", "build", "twine"]
+docs = ["mkdocs>=1.5", "mkdocs-material>=9.5"]
+
+[project.scripts]
+neuro-mcp = "neuro_mcp.server:main"
+
+[project.urls]
+Homepage = "https://github.com/AImplifier/neuro-mcp"
+Repository = "https://github.com/AImplifier/neuro-mcp"
+
+[tool.setuptools.packages.find]
+include = ["neuro_mcp*"]

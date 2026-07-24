@@ -1,0 +1,58 @@
+site_name: neuro-mcp
+site_description: >
+  A MCP for NeuroAgents that assist clinicians and researchers — MNE processing
+  and source imaging, a Postgres/BIDS data & EHR store, and NeuroII web
+  visualization.
+repo_url: https://github.com/AImplifier/neuro-mcp
+repo_name: AImplifier/neuro-mcp
+site_dir: docs_site
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - toc.follow
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Configuration: configuration.md
+  - Tool Reference:
+      - Overview: tools/index.md
+      - Processing (MNE): tools/processing.md
+      - Source Imaging (ESI): tools/source-imaging.md
+      - Data & EHR: tools/data-ehr.md
+      - neuroii Integration: tools/neuroii.md
+      - Visualization: tools/visualization.md
+  - Testing & Verification: testing.md
+  - Examples:
+      - Overview: examples/index.md
+      - Clinical Review, Annotation & EHR Audit: examples/clinical-review-ehr-audit.md
+      - Research Preprocessing & Spectral Pipeline: examples/research-preprocessing-spectral.md
+      - Source Imaging (ESI) Pipeline: examples/source-imaging-esi.md
+      - Interactive Visualization Generation: examples/interactive-visualization.md
+      - neuroii Integration: examples/neuroii-integration.md
+
+markdown_extensions:
+  - admonition
+  - tables
+  - fenced_code
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - toc:
+      permalink: true

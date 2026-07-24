@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# MkDocs build output
+docs_site/
+
+# neuro-mcp data / stores
+*.db
+*.sqlite
+bids/
+.neuro-mcp/
+testing/_tmp/
+testing/data/
+*.fif
+*.stc
+*.h5
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Claude Code local settings
+.claude/
+
+# Not part of the published package
+testing/
+testing2/

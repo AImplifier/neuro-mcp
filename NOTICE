@@ -1,0 +1,45 @@
+neuro-mcp
+Copyright (c) 2026 neuro-mcp contributors
+Licensed under the BSD 3-Clause License (see LICENSE).
+
+neuro-mcp does not bundle or redistribute any third-party source code. It depends
+on the packages below, which are installed separately by the user via pip. This
+notice records their licenses and satisfies their attribution requirements.
+
+The visualization layer (neuro_mcp/viz/neuroii_plots.py and tools_viz_neuroii.py)
+is derived from NEUROII, the project owners' own web application, ported here for
+offline standalone-HTML rendering with their consent.
+
+------------------------------------------------------------------------------
+Required dependencies (all permissive; compatible with BSD-3):
+------------------------------------------------------------------------------
+  MNE-Python        BSD-3-Clause    https://mne.tools
+  mne-bids          BSD-3-Clause    https://mne.tools/mne-bids
+  FastMCP           Apache-2.0      https://github.com/jlowin/fastmcp
+  mcp (MCP SDK)     MIT             https://github.com/modelcontextprotocol/python-sdk
+  SQLAlchemy        MIT             https://www.sqlalchemy.org
+  Pydantic          MIT             https://docs.pydantic.dev
+  httpx             BSD-3-Clause    https://www.python-httpx.org
+  matplotlib        PSF-based (matplotlib license)  https://matplotlib.org
+  Plotly.py         MIT             https://plotly.com/python
+  NumPy             BSD-3-Clause    https://numpy.org
+  SciPy             BSD-3-Clause    https://scipy.org
+  scikit-learn      BSD-3-Clause    https://scikit-learn.org
+  NiBabel           MIT             https://nipy.org/nibabel
+
+FastMCP is Apache-2.0: if you redistribute a build that bundles it, retain its
+NOTICE per Apache-2.0 section 4. neuro-mcp itself does not bundle it.
+
+------------------------------------------------------------------------------
+Optional dependencies (installed only via extras; note the licenses):
+------------------------------------------------------------------------------
+  psycopg[binary]   LGPL-3.0        [postgres]   https://www.psycopg.org
+      Used unmodified as a separate, dynamically-imported dependency. LGPL-3.0
+      permits this without relicensing neuro-mcp. Do not vendor a modified copy
+      without complying with the LGPL.
+
+  PyVista, pyvistaqt MIT            [viz3d]      https://pyvista.org
+  PySide6           LGPL-3.0        [viz3d]      https://www.qt.io/qt-for-python
+      PySide6 (LGPL-3.0) is deliberately chosen over PyQt6 (GPL-3.0) so the
+      optional 3D-visualization stack stays compatible with this BSD-3 project.
+      Do not substitute PyQt6 unless you accept its GPL-3.0 terms.
