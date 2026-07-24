@@ -31,6 +31,13 @@ theme:
 nav:
   - Home: index.md
   - Installation: installation.md
+  - "Tutorial: A Clinician's First EEG Review": examples/tutorial-first-eeg-review.md
+  - Examples:
+      - Overview: examples/index.md
+      - Clinical Review, Annotation & EHR Audit: examples/clinical-review-ehr-audit.md
+      - Research Preprocessing & Spectral Pipeline: examples/research-preprocessing-spectral.md
+      - Source Imaging (ESI) Pipeline: examples/source-imaging-esi.md
+      - Interactive Visualization Generation: examples/interactive-visualization.md
   - Configuration: configuration.md
   - Tool Reference:
       - Overview: tools/index.md
@@ -39,13 +46,6 @@ nav:
       - Data & EHR: tools/data-ehr.md
       - neuroii Integration: tools/neuroii.md
       - Visualization: tools/visualization.md
-  - Examples:
-      - Overview: examples/index.md
-      - "Tutorial: A Clinician's First EEG Review": examples/tutorial-first-eeg-review.md
-      - Clinical Review, Annotation & EHR Audit: examples/clinical-review-ehr-audit.md
-      - Research Preprocessing & Spectral Pipeline: examples/research-preprocessing-spectral.md
-      - Source Imaging (ESI) Pipeline: examples/source-imaging-esi.md
-      - Interactive Visualization Generation: examples/interactive-visualization.md
   - Testing & Verification: testing.md
 
 markdown_extensions:

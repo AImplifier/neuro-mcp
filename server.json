@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
   "name": "io.github.AImplifier/neuro-mcp",
   "description": "MCP for NeuroAgents assisting clinicians: MNE processing, EHR store, NeuroII visualization.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "website_url": "https://aimplifier.github.io/neuro-mcp/",
   "repository": {
     "url": "https://github.com/AImplifier/neuro-mcp",
@@ -12,7 +12,7 @@
     {
       "registry_type": "pypi",
       "identifier": "neuro-mcp",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "transport": {
         "type": "stdio"
       }

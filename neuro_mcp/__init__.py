@@ -6,5 +6,5 @@ and NeuroII web visualization — over MCP.
 
 from .app import mcp
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __all__ = ["mcp"]
