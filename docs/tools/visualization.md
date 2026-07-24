@@ -40,6 +40,26 @@ running server, no network access needed to view it, safe to email or drop
 in a shared folder. An agent can generate one, hand the `out_path` to the
 user, and the visualization keeps working indefinitely.
 
+## Where do the generated files go?
+
+Every tool call returns the file's location in `out_path` — that's the
+authoritative answer. But if you're looking for it on disk without checking
+the return value:
+
+- **If you passed `out_path` yourself**, it's exactly there (relative paths
+  resolve against the server process's working directory — prefer an
+  absolute path to avoid ambiguity).
+- **If you didn't**, it's saved under
+  `<the parent folder of BIDS_ROOT>/viz/<kind>_<session_id>.html` — e.g.
+  `visualize_averaging(session_id="jane")` with no `out_path` writes to
+  `.../viz/averaging_jane.html`. With the default configuration (see
+  [Configuration](../configuration.md)), that resolves to
+  `~/.neuro-mcp/viz/averaging_jane.html`. The directory is created
+  automatically if it doesn't exist yet.
+
+Open the file directly in any browser (double-click it, or
+`file:///path/to/the.html`) — no server needed.
+
 See [Interactive Visualization Generation](../examples/interactive-visualization.md)
 for a full worked example including the self-contained-HTML verification
 pattern used in `testing/verify_viz.py`.

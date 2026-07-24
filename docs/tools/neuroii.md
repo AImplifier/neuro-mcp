@@ -34,5 +34,5 @@ annotation, tagged with their `source`.
 | `POST` | `/api/v1/viz-sessions` | Create a shareable viz session |
 | `GET` | `/api/v1/recordings/{id}/annotations` | Fetch clinician annotations to pull back |
 
-See [neuroii Integration](../examples/neuroii-integration.md)
-for both the `not_configured` and live (mock-server-backed) response shapes.
+The neuroii web app itself isn't live yet — until then, every call returns the
+`not_configured` contract shown above rather than doing anything real.

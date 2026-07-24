@@ -39,19 +39,20 @@ nav:
       - Data & EHR: tools/data-ehr.md
       - neuroii Integration: tools/neuroii.md
       - Visualization: tools/visualization.md
-  - Testing & Verification: testing.md
   - Examples:
       - Overview: examples/index.md
+      - "Tutorial: A Clinician's First EEG Review": examples/tutorial-first-eeg-review.md
       - Clinical Review, Annotation & EHR Audit: examples/clinical-review-ehr-audit.md
       - Research Preprocessing & Spectral Pipeline: examples/research-preprocessing-spectral.md
       - Source Imaging (ESI) Pipeline: examples/source-imaging-esi.md
       - Interactive Visualization Generation: examples/interactive-visualization.md
-      - neuroii Integration: examples/neuroii-integration.md
+  - Testing & Verification: testing.md
 
 markdown_extensions:
   - admonition
   - tables
   - fenced_code
+  - md_in_html
   - pymdownx.highlight
   - pymdownx.superfences
   - toc:
