@@ -21,9 +21,6 @@ workflow: signal processing and source imaging (via
 (Postgres + [BIDS](https://bids.neuroimaging.io)), and **NeuroII** web
 visualization.
 
-It builds on the processing core of `eeg-mcp` (copied in and rebranded
-`eeg`→`neuro`) and adds the data, EHR, and visualization layers around it.
-
 ## Concept
 
 ```mermaid
