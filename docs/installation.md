@@ -98,6 +98,50 @@ claude mcp list              # shows a connected status once it's up
 claude mcp remove neuro-mcp
 ```
 
+### Claude Desktop (GUI)
+
+Claude Desktop doesn't have an "add server" button for custom servers — you
+edit a config file, but you get there entirely through the GUI:
+
+1. Click the **Claude** menu in your system menu bar (macOS) — not the
+   in-window settings — and choose **Settings...**. On Windows, this is the
+   Claude icon in the system tray, or **File → Settings** from the app window.
+2. Open the **Developer** tab, then click **Edit Config**. This creates (or
+   opens) `claude_desktop_config.json`:
+     - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+     - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+3. Add a `neuro-analysis` entry under `mcpServers` (create the file with this
+   content if it doesn't have one yet):
+   ```json
+   {
+     "mcpServers": {
+       "neuro-analysis": {
+         "command": "neuro-mcp",
+         "env": {
+           "DATABASE_URL": "sqlite:////absolute/path/neuro_mcp.db",
+           "BIDS_ROOT": "/absolute/path/bids"
+         }
+       }
+     }
+   }
+   ```
+   If `neuro-mcp` isn't on Claude Desktop's `PATH` (common if it's installed
+   in a conda/virtualenv), replace `"command": "neuro-mcp"` with the full
+   path to that environment's `neuro-mcp` executable — see
+   [Other MCP hosts](#other-mcp-hosts) below for the equivalent
+   `python -m neuro_mcp` form. The `env` block is optional; omit it to use
+   the defaults in [Configuration](configuration.md).
+4. Save the file, then **fully quit and restart** Claude Desktop (not just
+   close the window) so it picks up the new config.
+5. In a conversation, click the **Add files, connectors, and more** (`+` /
+   slider) icon in the bottom-left of the message box → **Connectors** →
+   **Manage connectors** → select **neuro-analysis** to confirm it connected
+   and see its tools listed.
+
+If it doesn't show up, check the logs — macOS: `~/Library/Logs/Claude/mcp*.log`,
+Windows: `%APPDATA%\Claude\logs\mcp*.log` — a `mcp-server-neuro-analysis.log`
+file there will have any startup error.
+
 ### Codex CLI
 
 ```bash
