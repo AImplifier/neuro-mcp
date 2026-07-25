@@ -20,27 +20,9 @@ clinical deployment.
 
 ## Registering with an MCP host
 
-```bash
-python -m neuro_mcp     # stdio transport
-```
-
-```json
-{
-  "mcpServers": {
-    "neuro-analysis": {
-      "command": "/path/to/envs/neuro-mcp/bin/python",
-      "args": ["-m", "neuro_mcp"],
-      "env": {
-        "DATABASE_URL": "sqlite:////data/neuro_mcp.db",
-        "BIDS_ROOT": "/data/bids"
-      }
-    }
-  }
-}
-```
-
-Point `command` at the interpreter inside the environment where you ran
-`pip install -e .` (or a released `neuro-mcp` install).
+See [Installation → Connect it to an agent](installation.md#4-connect-it-to-an-agent)
+for exact steps for Claude Code, Codex CLI, and any other MCP host — this
+page covers what to configure, that page covers how to wire it up.
 
 ## neuroii integration status
 
