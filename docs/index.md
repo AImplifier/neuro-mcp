@@ -1,25 +1,55 @@
-# neuro-mcp
+<div align="center" markdown="1">
 
-A MCP for **NeuroAgents** that assist clinicians and researchers. It gives an
-AI agent one interface over the whole workflow: signal processing and source
-imaging (via [MNE-Python](https://mne.tools)), a persistent dataset + **EHR**
-store (Postgres + [BIDS](https://bids.neuroimaging.io)), and **NeuroII** web
+# 🧠 neuro-mcp
+
+### An MCP for NeuroAgents that assist clinicians and researchers
+
+[![PyPI](https://img.shields.io/pypi/v/neuro-mcp?color=3775a9&logo=pypi&logoColor=white)](https://pypi.org/project/neuro-mcp/)
+[![Python](https://img.shields.io/pypi/pyversions/neuro-mcp?color=3775a9)](https://pypi.org/project/neuro-mcp/)
+[![License](https://img.shields.io/badge/license-BSD--3--Clause-4f8cff)](https://github.com/AImplifier/neuro-mcp/blob/main/LICENSE)
+
+**[GitHub](https://github.com/AImplifier/neuro-mcp)** · **[PyPI](https://pypi.org/project/neuro-mcp/)** · **[Tutorial](examples/tutorial-first-eeg-review.md)** · **[Tool Reference](tools/index.md)**
+
+</div>
+
+It gives an AI agent one interface over the whole clinical/research EEG
+workflow: signal processing and source imaging (via
+[MNE-Python](https://mne.tools)), a persistent dataset + **EHR** store
+(Postgres + [BIDS](https://bids.neuroimaging.io)), and **NeuroII** web
 visualization.
 
 The FastMCP server is named `neuro-analysis` and exposes **54 tools** across
 five areas.
 
-## Architecture
+## Concept
 
+```mermaid
+flowchart LR
+    Clinician(["🩺 Clinician"])
+    Researcher(["🔬 Researcher"])
+    Agent[["🤖 AI Agent"]]
+    Server(("neuro-mcp<br/>FastMCP · 54 tools"))
+
+    Clinician -- talks to --> Agent
+    Researcher -- talks to --> Agent
+    Agent -- MCP --> Server
+
+    Server --> Processing["Processing &amp; Source Imaging<br/>MNE-Python + ESI"]
+    Server --> Data["Data &amp; EHR Store<br/>Postgres + BIDS<br/>versioned &amp; audited"]
+    Server --> NeuroII["NeuroII<br/>Web Visualization"]
+
+    classDef proc fill:#4f8cff,stroke:#2f5fbf,color:#fff
+    classDef data fill:#2fb380,stroke:#1c7a55,color:#fff
+    classDef viz fill:#b06fe0,stroke:#7c3fae,color:#fff
+    class Processing proc
+    class Data data
+    class NeuroII viz
 ```
-                       neuro-mcp  (FastMCP "neuro-analysis", 54 tools)
- ┌──────────────────────┬────────────────────────┬──────────────────────┐
- │ processing            │ data + EHR store       │ neuroii              │
- │ (MNE + ESI)           │ (Postgres + BIDS)      │ (web visualization)  │
- └──────────────────────┴────────────────────────┴──────────────────────┘
-   in-memory                SQLAlchemy +               HTTP client
-   session                  BIDS-on-disk               (stub contract)
-```
+
+A clinician or researcher never calls a tool directly — they talk to an
+agent in plain English, and the agent drives neuro-mcp's 54 tools underneath.
+See the [Tutorial](examples/tutorial-first-eeg-review.md) for what that
+actually looks like end to end.
 
 - **Processing** tools mutate an in-memory `session_id`-keyed state object —
   load a recording once, then chain filter/ICA/epoch/spectral calls against
