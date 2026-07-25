@@ -96,11 +96,18 @@ distinct from the record's clinical `status`, so the two never collide.
 ## Install
 
 ```bash
-conda activate eeg-mcp            # or any Python >=3.10 env
-pip install -e .                  # core
-pip install -e ".[postgres]"      # + PostgreSQL driver (LGPL-3.0)
-pip install -e ".[viz3d]"         # + 3D source rendering (PySide6, LGPL-3.0)
+conda create -n neuro-mcp python=3.11 -y   # or any Python >=3.10 env
+conda activate neuro-mcp
+pip install neuro-mcp              # core, from PyPI
+pip install "neuro-mcp[postgres]"  # + PostgreSQL driver (LGPL-3.0)
+pip install "neuro-mcp[viz3d]"     # + 3D source rendering (PySide6, LGPL-3.0)
 ```
+
+Working on neuro-mcp itself instead? Clone the repo and use
+`pip install -e .` in place of the line above — see
+[Installation](https://aimplifier.github.io/neuro-mcp/installation/) for
+the full zero-to-hero setup, including Claude Code/Codex CLI/Claude Desktop
+registration.
 
 ## Configure (environment variables)
 
@@ -125,7 +132,7 @@ python -m neuro_mcp     # stdio transport
 {
   "mcpServers": {
     "neuro-analysis": {
-      "command": "/path/to/envs/eeg-mcp/bin/python",
+      "command": "/path/to/envs/neuro-mcp/bin/python",
       "args": ["-m", "neuro_mcp"],
       "env": { "DATABASE_URL": "sqlite:////data/neuro_mcp.db", "BIDS_ROOT": "/data/bids" }
     }
