@@ -1,0 +1,31 @@
+# Publishes server.json to the MCP Registry using this repository's GitHub OIDC
+# identity, which is what authorises the io.github.AImplifier/* namespace.
+# Run it manually (Actions > Publish to MCP Registry > Run workflow) AFTER the
+# matching version is on PyPI; the registry checks that the package exists.
+name: Publish to MCP Registry
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install mcp-publisher
+        run: |
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/download/v1.8.5/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+
+      - name: Validate server.json
+        run: ./mcp-publisher validate
+
+      - name: Log in (GitHub OIDC)
+        run: ./mcp-publisher login github-oidc
+
+      - name: Publish
+        run: ./mcp-publisher publish
