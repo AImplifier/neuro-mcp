@@ -24,12 +24,17 @@ epoch_neuro(session_id="esi", tmin=-0.2, tmax=0.5, reject_uv=None)
 ```python
 visualize_timeseries(session_id="esi", page_len=10.0, out_path="/out/ts.html")
 # -> {"kind": "timeseries", "out_path": "/out/ts.html",
-#     "n_channels": 20, "embedded_seconds": 60.0, "bytes": 12034048}
+#     "n_channels": 20, "embedded_seconds": 60.0, "n_events": 0,
+#     "bytes": 12034048}
 ```
 
 Opens as a self-contained page with page navigation (⏮ ◀ ▶ ⏭), a page-length
 box, scroll-to-zoom amplitude, and a grid toggle — all client-side JavaScript,
-no server needed to view it.
+no server needed to view it. Recordings that carry annotations also get a
+labelled marker line per event and an **events** toggle (`n_events` counts
+them). On a machine with a display the page opens in your browser as soon as
+the file is written; see
+[Automatic browser launch](../tools/visualization.md#automatic-browser-launch).
 
 ## 3. EvokedView — averaged ERP + topomap
 

@@ -142,7 +142,7 @@ def _page(title: str, body: str, data: dict, script: str,
 # --------------------------------------------------------------------------- #
 # Raw: paging + scroll-amplitude + grid toggle
 # --------------------------------------------------------------------------- #
-def raw_html(title, fig_dict, duration, page_len, favicon="🧠"):
+def raw_html(title, fig_dict, duration, page_len, events=None, favicon="🧠"):
     body = """
 <div class="viz-wrap fill-height">
   <div class="viz-main">
@@ -156,6 +156,7 @@ def raw_html(title, fig_dict, duration, page_len, favicon="🧠"):
       <button class="icon-btn" id="b-fwd" title="Next page">▶</button>
       <button class="icon-btn" id="b-end" title="Jump to end">⏭</button>
       <button class="btn active" id="b-grid" title="Toggle gridlines" style="margin-left:6px">grid</button>
+      <button class="btn active" id="b-events" title="Toggle event markers">events</button>
     </div>
     <div class="sm" style="text-align:center">scroll over the plot to change amplitude</div>
   </div>
@@ -163,15 +164,36 @@ def raw_html(title, fig_dict, duration, page_len, favicon="🧠"):
     script = """
 const D = JSON.parse(document.getElementById('vizdata').textContent);
 const fig = D.fig; const gd = document.getElementById('plot');
-let tmin=0, pageLen=D.page_len, duration=D.duration, gridOn=true;
+const events = D.events||[];
+let tmin=0, pageLen=D.page_len, duration=D.duration, gridOn=true, eventsOn=true;
 // Baseline y-axis ranges (per channel) for amplitude gain about zero.
 const baseRanges={}; Object.keys(fig.layout).forEach(k=>{if(/^yaxis\\d*$/.test(k)&&fig.layout[k].range)baseRanges[k]=fig.layout[k].range.slice();});
+// Channel-name labels (from build_stacked_traces) live in the initial annotations;
+// event labels are appended/removed independently so toggling one never drops the other.
+const chAnnotations = (fig.layout.annotations||[]).slice();
 let gain=1;
+function eventShapes(){
+  if(!eventsOn) return [];
+  return events.map(e=>({type:'line',x0:e.t,x1:e.t,xref:'x',y0:0,y1:1,yref:'paper',
+    line:{color:'rgba(214,39,40,0.7)',width:1,dash:'dot'}}));
+}
+function eventAnnotations(){
+  if(!eventsOn) return [];
+  // Centered on the marker line itself (mid-plot, not up in the margin) so no
+  // extra space has to be reserved above the traces at all; a translucent
+  // background keeps the label legible over the dense channel traces.
+  return events.map(e=>({x:e.t,y:0.5,xref:'x',yref:'paper',text:e.label,showarrow:false,
+    xanchor:'middle',yanchor:'middle',textangle:-90,
+    font:{size:10,color:'rgba(180,30,30,0.9)'},
+    bgcolor:'rgba(255,255,255,0.85)',bordercolor:'rgba(180,30,30,0.4)',borderwidth:1,borderpad:2}));
+}
 Plotly.newPlot(gd, fig.data, fig.layout, {responsive:true,displaylogo:false}).then(()=>Plotly.Plots.resize(gd));
 window.addEventListener('resize',()=>Plotly.Plots.resize(gd));
 function applyView(){
   const up={'xaxis.range':[tmin, Math.min(tmin+pageLen,duration)]};
   for(const k in baseRanges){up[k+'.range']=[baseRanges[k][0]/gain, baseRanges[k][1]/gain];}
+  up['shapes']=eventShapes();
+  up['annotations']=chAnnotations.concat(eventAnnotations());
   Plotly.relayout(gd, up);
   document.getElementById('pos').textContent=tmin.toFixed(2)+'–'+Math.min(tmin+pageLen,duration).toFixed(2)+'s / '+duration.toFixed(0)+'s';
 }
@@ -183,10 +205,11 @@ document.getElementById('b-end').onclick=()=>{tmin=Math.max(0,duration-pageLen);
 document.getElementById('pagelen').onchange=(e)=>{pageLen=Math.max(0.5,parseFloat(e.target.value)||pageLen);applyView();};
 document.getElementById('b-grid').onclick=(e)=>{gridOn=!gridOn;e.target.classList.toggle('active',gridOn);
   Plotly.relayout(gd,{'xaxis.showgrid':gridOn,'xaxis.minor.showgrid':gridOn});};
+document.getElementById('b-events').onclick=(e)=>{eventsOn=!eventsOn;e.target.classList.toggle('active',eventsOn);applyView();};
 gd.addEventListener('wheel',(ev)=>{ev.preventDefault();gain*=(ev.deltaY<0?1.15:1/1.15);gain=Math.max(0.05,Math.min(50,gain));applyView();},{passive:false});
 applyView();
 """
-    data = {"fig": fig_dict, "duration": duration, "page_len": page_len}
+    data = {"fig": fig_dict, "duration": duration, "page_len": page_len, "events": events or []}
     return _page(title, body, data, script, subtitle=title,
                  badge="Raw", badge_cls="badge-raw"), favicon
 

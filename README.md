@@ -89,7 +89,7 @@ distinct from the record's clinical `status`, so the two never collide.
 - **neuroii**: `neuroii_push_recording`, `neuroii_create_viz_session`,
   `neuroii_pull_annotations`.
 - **neuroii visualizations** (standalone interactive HTML, Plotly): `visualize_timeseries`
-  (stacked multi-channel EEG with scroll + amplitude buttons), `visualize_averaging`
+  (stacked multi-channel EEG with scroll + amplitude buttons and annotation markers), `visualize_averaging`
   (ERP butterfly + scalp topomap scrubbed by a time slider), `visualize_esi`
   (source-estimate ROI time courses + per-time activation bars).
 
@@ -147,8 +147,8 @@ files (Plotly, embedded — no server, works offline). Each returns the `.html`
 path; interaction runs client-side:
 
 - `visualize_timeseries` (RawView) — MNE-style stacked channels with page
-  navigation (⏮ ◀ ▶ ⏭), a page-length box, scroll-to-zoom amplitude, and a grid
-  toggle.
+  navigation (⏮ ◀ ▶ ⏭), a page-length box, scroll-to-zoom amplitude, a grid
+  toggle, and recording annotations drawn as labelled marker lines (toggleable).
 - `visualize_averaging` (EvokedView) — the averaged ERP as stacked channels with
   a green time cursor + a scalp topomap; a time slider scrubs both, plus a
   summary sidebar (nave / peak / tmin / tmax).

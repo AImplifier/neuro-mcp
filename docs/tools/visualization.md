@@ -16,6 +16,12 @@ amplitude, and a grid toggle. Requires a loaded recording (`load_neuro` /
 `import_recording`). `max_seconds` bounds how much of the recording is
 embedded in the HTML.
 
+Any annotations on the recording (task cues, blink prompts, markers) are drawn
+as dashed vertical lines with the label centred on each line; the **events**
+button next to **grid** shows or hides them. The result's `n_events` reports
+how many annotations fell inside the embedded window (`0` if the file has
+none — nothing is drawn in that case).
+
 ### `visualize_averaging(session_id, condition=None, n_frames=40, out_path=None)`
 **EvokedView** — the averaged ERP as stacked channels with a green time
 cursor (left pane) plus a scalp topomap at the cursor time (right pane). A
@@ -57,7 +63,16 @@ the return value:
   `~/.neuro-mcp/viz/averaging_jane.html`. The directory is created
   automatically if it doesn't exist yet.
 
-Open the file directly in any browser (double-click it, or
+## Automatic browser launch
+
+After writing the file, each tool opens it in your default browser. This is
+skipped automatically when the process is headless — Linux with no `DISPLAY` /
+`WAYLAND_DISPLAY`, or Windows running as a service — so server and clinical
+deployments are unaffected, and a failed launch never makes the tool fail. Set
+`NEURO_MCP_NO_BROWSER=1` to suppress it on a machine that does have a display
+(for example in batch scripts or test runs).
+
+Otherwise open the file directly in any browser (double-click it, or
 `file:///path/to/the.html`) — no server needed.
 
 See [Interactive Visualization Generation](../examples/interactive-visualization.md)

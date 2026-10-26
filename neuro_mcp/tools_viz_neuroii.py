@@ -18,6 +18,8 @@ in neuro_mcp.viz.html_views.
 from __future__ import annotations
 
 import os
+import sys
+import webbrowser
 from pathlib import Path
 
 import mne
@@ -56,10 +58,49 @@ def _resolve_out(out_path: str | None, default_name: str) -> str:
     return str(_viz_dir() / default_name)
 
 
+def _is_headless() -> bool:
+    """True when opening a browser on this machine is pointless or unsafe."""
+    if os.environ.get("NEURO_MCP_NO_BROWSER"):
+        return True
+    if sys.platform.startswith("linux"):
+        return not (os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY"))
+    if sys.platform == "darwin":
+        return False
+    if sys.platform == "win32":
+        return os.environ.get("SESSIONNAME") in (None, "Services")
+    return True
+
+
+def _maybe_open_browser(out_path: str) -> None:
+    """Best-effort launch of the written file; a failure must never break the tool."""
+    if _is_headless():
+        return
+    try:
+        webbrowser.open(Path(out_path).absolute().as_uri())
+    except Exception:
+        pass
+
+
 def _write(html: str, out_path: str) -> int:
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
+    _maybe_open_browser(out_path)
     return os.path.getsize(out_path)
+
+
+def _annotation_events(raw: mne.io.BaseRaw, tmax: float) -> list[dict]:
+    """Annotation onsets (as raw-relative seconds, label) within [0, tmax]."""
+    if len(raw.annotations) == 0:
+        return []
+    events, event_id = mne.events_from_annotations(raw, verbose=False)
+    inv = {code: label for label, code in event_id.items()}
+    sfreq = float(raw.info["sfreq"])
+    out = []
+    for samp, _, code in events:
+        t = (int(samp) - raw.first_samp) / sfreq
+        if 0 <= t <= tmax:
+            out.append({"t": float(t), "label": inv.get(int(code), str(code))})
+    return out
 
 
 # --------------------------------------------------------------------------- #
@@ -77,7 +118,9 @@ def visualize_timeseries(
 
     Stacked channels on one amplitude scale, with NEUROII's controls: page
     navigation (⏮ ◀ ▶ ⏭), a page-length box, scroll-to-zoom amplitude, and a
-    grid toggle. Requires a loaded recording (load_neuro / import_recording).
+    grid toggle. Annotation onsets (e.g. task markers, blink cues) are overlaid
+    as dashed vertical lines with labels, toggleable independently of the grid.
+    Requires a loaded recording (load_neuro / import_recording).
 
     Args:
         session_id: Processing session holding the recording.
@@ -98,6 +141,7 @@ def visualize_timeseries(
     traces, yaxes, annotations = build_stacked_traces(
         data, ch_names, raw.info["bads"], sigma, x0=float(times[0]), dx=uniform_dx(times)
     )
+    events = _annotation_events(raw, embed_stop)
     fig = go.Figure(data=[go.Scatter(**t) for t in traces])
     layout = dict(
         annotations=annotations, showlegend=False, plot_bgcolor="#ffffff",
@@ -114,12 +158,13 @@ def visualize_timeseries(
 
     html, favicon = raw_html(
         f"EEG time series — {len(ch_names)} channels", fig.to_dict(),
-        duration=float(embed_stop), page_len=page_len,
+        duration=float(embed_stop), page_len=page_len, events=events,
     )
     out = _resolve_out(out_path, f"timeseries_{session_id}.html")
     size = _write(html, out)
     return {"session_id": session_id, "kind": "timeseries", "out_path": out,
-            "n_channels": len(ch_names), "embedded_seconds": float(embed_stop), "bytes": size}
+            "n_channels": len(ch_names), "embedded_seconds": float(embed_stop),
+            "n_events": len(events), "bytes": size}
 
 
 # --------------------------------------------------------------------------- #
